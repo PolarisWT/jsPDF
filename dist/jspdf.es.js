@@ -179,40 +179,40 @@ var saveAs =
     ? function saveAs() {
         /* noop */
       }
-    : // Use download attribute first if possible (#193 Lumia mobile)
-    "download" in HTMLAnchorElement.prototype
-    ? function saveAs(blob, name, opts) {
-        var URL = globalObject.URL || globalObject.webkitURL;
-        var a = document.createElement("a");
-        name = name || blob.name || "download";
-
-        a.download = name;
-        a.rel = "noopener"; // tabnabbing
-
-        // TODO: detect chrome extensions & packaged apps
-        // a.target = '_blank'
-
-        if (typeof blob === "string") {
-          // Support regular links
-          a.href = blob;
-          if (a.origin !== location.origin) {
-            corsEnabled(a.href)
-              ? download(blob, name, opts)
-              : click(a, (a.target = "_blank"));
-          } else {
-            click(a);
-          }
-        } else {
-          // Support blobs
-          a.href = URL.createObjectURL(blob);
-          setTimeout(function() {
-            URL.revokeObjectURL(a.href);
-          }, 4e4); // 40s
-          setTimeout(function() {
-            click(a);
-          }, 0);
-        }
-      }
+    // : // Use download attribute first if possible (#193 Lumia mobile)
+    // "download" in HTMLAnchorElement.prototype
+    // ? function saveAs(blob, name, opts) {
+    //     var URL = globalObject.URL || globalObject.webkitURL;
+    //     var a = document.createElement("a");
+    //     name = name || blob.name || "download";
+    //
+    //     a.download = name;
+    //     a.rel = "noopener"; // tabnabbing
+    //
+    //     // TODO: detect chrome extensions & packaged apps
+    //     // a.target = '_blank'
+    //
+    //     if (typeof blob === "string") {
+    //       // Support regular links
+    //       a.href = blob;
+    //       if (a.origin !== location.origin) {
+    //         corsEnabled(a.href)
+    //           ? download(blob, name, opts)
+    //           : click(a, (a.target = "_blank"));
+    //       } else {
+    //         click(a);
+    //       }
+    //     } else {
+    //       // Support blobs
+    //       a.href = URL.createObjectURL(blob);
+    //       setTimeout(function() {
+    //         URL.revokeObjectURL(a.href);
+    //       }, 4e4); // 40s
+    //       setTimeout(function() {
+    //         click(a);
+    //       }, 0);
+    //     }
+    //   }
     : // Use msSaveOrOpenBlob as a second approach
     "msSaveOrOpenBlob" in navigator
     ? function saveAs(blob, name, opts) {
